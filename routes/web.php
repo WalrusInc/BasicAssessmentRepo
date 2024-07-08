@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\AuthController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,30 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+// Login route
+
+
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/', function () {
+        return view('welcome');
+    });
 });
+
+Route::get('/api/csrf-token', function () {
+    return response()->json(['csrf_token' => csrf_token()]);
+});
+Route::middleware('web')->group(function () {
+    Route::post('/api/login', [AuthController::class, 'login']);
+    
+});
+Route::post('/api/register', [AuthController::class, 'register']);
+
+
+
+
+
